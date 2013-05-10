@@ -21,7 +21,7 @@ class Mytwitter extends CI_Controller {
             $this->mainpage();
 		}
 		else{
-            echo "Login Error";
+            echo "login Error";
         }
     }
 	
@@ -33,15 +33,11 @@ class Mytwitter extends CI_Controller {
     public function signupsession()
     {   
     	$this->load->library('form_validation');
-        $this->form_validation->set_rules('signupID','ID????????','required');
-        $this->form_validation->set_rules('signupPW','PW????????','required');
-        $this->form_validation->set_rules('signupID','ID??????','alpha_dash');
-        $this->form_validation->set_rules('signupPW','PW??????','alpha_dash');
-        $this->form_validation->set_rules('signupID','ID?16????','max_length[16]');
-        $this->form_validation->set_rules('signupPW','PW?16????','max_length[16]');
+        $this->form_validation->set_rules('signupID','ID','required|max_length[16]|alpha_dash');
+        $this->form_validation->set_rules('signupPW','PW','required|max_length[16]|alpha_dash');
 
         if($this->form_validation->run() == false){
-        	echo "signup ERROR";
+        	echo "sign up ERROR";
         }
         else{
             $this->load->model( 'Mytwitter_signup_model', '', true);

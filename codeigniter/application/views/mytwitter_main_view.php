@@ -4,11 +4,11 @@
 
 <style>
 textarea{
-	position:fixed;
+    position:fixed;
 }
 input{
-	position:fixed;
-	left:400;
+    position:fixed;
+    left:400;
 }
 </style>
 
@@ -23,7 +23,7 @@ input{
 </br>
 Login ID: 
 <?php
-	echo $this->session->userdata('ID');
+    echo $this->session->userdata('ID');
 ?>
 
 <a id="test"></a>
@@ -48,10 +48,10 @@ $("#textarea").keydown(function(e){
 
 
 $(window).scroll(function(){
-	var scrollTop = $(document).scrollTop();
-	var tweetresultHeight = $("#tweetresult").height();
-	var tweetresultOffset = $("#tweetresult").offset().top;
-	if((tweetresultOffset + tweetresultHeight) < (scrollTop + browserHeight)){
+    var scrollTop = $(document).scrollTop();
+    var tweetresultHeight = $("#tweetresult").height();
+    var tweetresultOffset = $("#tweetresult").offset().top;
+    if((tweetresultOffset + tweetresultHeight) < (scrollTop + browserHeight)){
         tweetload(jsondata,3);
     }
 });
@@ -60,15 +60,15 @@ $(document).ready(function (){
     $.getJSON("tweetload/" + userID + "/",function(data){
     	jsondata = data;
         lastTweetNum = data[0].num;
-        tweetload(jsondata,5);
+        tweetload(jsondata, 5);
     });
 });
 
 function tweetsave(){
-	var val = $("#textarea").val().replace(/\n/g,"");
+    var val = $("#textarea").val().replace(/\n/g, "");
     var str = $('<div/>').text(val).html();
     if(str != ""){
-        $.post("tweetsave",{text:str,ID:userID},function(){
+        $.post("tweetsave",{text:str, ID:userID},function(){
             $("#test").append(" posted! ");
             $("#tweetresult").prepend("</br>*" + str + "</br>----------------------------------------------------</br>");
         });
