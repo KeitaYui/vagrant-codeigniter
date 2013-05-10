@@ -16,34 +16,34 @@ input{
 <body>
 
 <form>
-<textarea id="textarea" cols="50" rows="1"></textarea>
-<input type ="button" id="tweetbutton" value="tweet">
+<textarea id = "textarea" cols = "50" rows = "1" name = "textform"></textarea>
+<input type ="button" id = "tweetbutton" value = "tweet">
 </form>
 
 </br>
 Login ID: 
 <?php
-	if(isset($_SESSION["ID"])){
-		echo $_SESSION["ID"];
-	}
+	echo $this->session->userdata('ID');
 ?>
+
 <a id="test"></a>
 <div id='tweetresult'></div>
 
-<script type="text/javascript" src="<?php echo base_url('js/jquery-1.9.1.min.js');?>"></script>
-<script type="text/javascript">
+<script type = "text/javascript" src = "<?php echo base_url('js/jquery-1.9.1.min.js');?>"></script>
+<script type = "text/javascript">
 
-var userID = "<?php echo $_SESSION['ID'];?>";
+var userID = "<?php echo $this->session->userdata('ID');?>";
 var lastTweetNum = 0;
 var browserHeight = $(window).height();
+var jsondata = new Array();
 
 $("#tweetbutton").click(function(){
-	var str = $("#textarea").val();
-	$.post("<?php echo base_url('js/tweetsave.php');?>",{text:str,ID:userID},function(json){
-		$("#test").append(" posted! ");
-		$("#tweetresult").prepend("</br>*" + str + "</br>----------------------------------------------------</br>");
-		$("#textarea").val("");
-	});
+    tweetsave();
+});
+$("#textarea").keydown(function(e){
+    if((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)){
+        tweetsave();
+    }
 });
 
 
@@ -52,38 +52,39 @@ $(window).scroll(function(){
 	var tweetresultHeight = $("#tweetresult").height();
 	var tweetresultOffset = $("#tweetresult").offset().top;
 	if((tweetresultOffset + tweetresultHeight) < (scrollTop + browserHeight)){
-		$.getJSON("<?php echo base_url('js/tweets.json');?>", function(data){
-			for(var i in data){
-				if(data[i].ID == userID){
-					for(var j = 0;j < 5;j++){
-						if(lastTweetNum > 0){
-							$("#tweetresult").append("</br>*" + data[i].tweet[lastTweetNum].str + "</br>----------------------------------------------------</br>");
-							lastTweetNum--;
-						}
-					}
-				}
-			}
-		});
-	}
-	
-	
+        tweetload(jsondata,3);
+    }
 });
 
-$(document).ready(function () {
-	$.getJSON("<?php echo base_url('js/tweets.json');?>", function(data){
-		for(var i in data){
-			if(data[i].ID == userID){
-				lastTweetNum = data[i].maxNum;
-				for(var j = 0;j < 5;j++){
-					if(lastTweetNum > 0){
-						$("#tweetresult").append("</br>*" + data[i].tweet[lastTweetNum].str + "</br>----------------------------------------------------</br>");
-						lastTweetNum--;
-					}
-				}
-			}
-		}
-	});
+$(document).ready(function (){
+    $.getJSON("tweetload/" + userID + "/",function(data){
+    	jsondata = data;
+        lastTweetNum = data[0].num;
+        tweetload(jsondata,5);
+    });
 });
+
+function tweetsave(){
+	var val = $("#textarea").val().replace(/\n/g,"");
+    var str = $('<div/>').text(val).html();
+    if(str != ""){
+        $.post("tweetsave",{text:str,ID:userID},function(){
+            $("#test").append(" posted! ");
+            $("#tweetresult").prepend("</br>*" + str + "</br>----------------------------------------------------</br>");
+        });
+    }
+    $("#textarea").val("");
+}
+
+function tweetload(data,j){
+    for(var i = 0; i < j; i++){
+        if(lastTweetNum > 0){
+            $("#tweetresult").append("</br>*" + data[lastTweetNum].tweet + "</br>----------------------------------------------------</br>");
+            lastTweetNum--;
+        }
+    }
+}
+
 </script>
 
 </body>
