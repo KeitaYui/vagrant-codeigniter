@@ -2,7 +2,7 @@
 <head>
 <title>MainPage</title>
 
-<style>
+<style type="text/css">
 textarea{
     position:fixed;
 }
@@ -32,10 +32,10 @@ Login ID:
 <script type = "text/javascript" src = "<?php echo base_url('js/jquery-1.9.1.min.js');?>"></script>
 <script type = "text/javascript">
 
-var userID = "<?php echo $this->session->userdata('ID');?>";
-var lastTweetNum = 0;
+var userID        = "<?php echo $this->session->userdata('ID');?>";
+var lastTweetNum  = 0;
 var browserHeight = $(window).height();
-var jsondata = new Array();
+var jsondata      = new Array();
 
 $("#tweetbutton").click(function(){
     tweetsave();
@@ -48,7 +48,7 @@ $("#textarea").keydown(function(e){
 
 
 $(window).scroll(function(){
-    var scrollTop = $(document).scrollTop();
+    var scrollTop         = $(document).scrollTop();
     var tweetresultHeight = $("#tweetresult").height();
     var tweetresultOffset = $("#tweetresult").offset().top;
     if((tweetresultOffset + tweetresultHeight) < (scrollTop + browserHeight)){
@@ -57,8 +57,8 @@ $(window).scroll(function(){
 });
 
 $(document).ready(function (){
-    $.getJSON("tweetload/" + userID + "/",function(data){
-    	jsondata = data;
+    $.getJSON("<?php echo base_url('index.php/mytwitter_main_controller/tweetload/'); ?>"+ "/" + userID + "/",function(data){
+    	jsondata     = data;
         lastTweetNum = data[0].num;
         tweetload(jsondata, 5);
     });
