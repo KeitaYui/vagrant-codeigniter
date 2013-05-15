@@ -17,7 +17,7 @@ input{
 
 <form>
 <textarea id = "textarea" cols = "50" rows = "1" name = "textform"></textarea>
-<input type ="button" id = "tweetbutton" value = "tweet">
+<input type = "button" id = "tweetbutton" value = "tweet">
 </form>
 
 </br>
@@ -40,6 +40,7 @@ var jsondata      = new Array();
 $("#tweetbutton").click(function(){
     tweetsave();
 });
+
 $("#textarea").keydown(function(e){
     if((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)){
         tweetsave();
@@ -52,13 +53,13 @@ $(window).scroll(function(){
     var tweetresultHeight = $("#tweetresult").height();
     var tweetresultOffset = $("#tweetresult").offset().top;
     if((tweetresultOffset + tweetresultHeight) < (scrollTop + browserHeight)){
-        tweetload(jsondata,3);
+        tweetload(jsondata, 3);
     }
 });
 
 $(document).ready(function (){
     $.getJSON("<?php echo base_url('index.php/mytwitter_main_controller/tweetload/'); ?>"+ "/" + userID + "/",function(data){
-    	jsondata     = data;
+        jsondata     = data;
         lastTweetNum = data[0].num;
         tweetload(jsondata, 5);
     });
@@ -76,7 +77,7 @@ function tweetsave(){
     $("#textarea").val("");
 }
 
-function tweetload(data,j){
+function tweetload(data, j){
     for(var i = 0; i < j; i++){
         if(lastTweetNum > 0){
             $("#tweetresult").append("</br>*" + data[lastTweetNum].tweet + "</br>----------------------------------------------------</br>");
